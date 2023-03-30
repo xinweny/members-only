@@ -9,8 +9,8 @@ const UserSchema = new Schema({
   membership_status: {
     type: String,
     required: true,
-    enum: ['non_member', 'member', 'admin'],
-    default: 'non_member',
+    enum: ['Non-member', 'Member', 'Admin'],
+    default: 'Non-member',
   },
 });
 

@@ -40,3 +40,13 @@ exports.createMessage = [
     }
   },
 ];
+
+exports.deleteMessage = async (req, res, next) => {
+  try {
+    await Message.findByIdAndDelete(req.body.messageId);
+
+    res.redirect('/');
+  } catch (err) {
+    return next(err);
+  }
+};

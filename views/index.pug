@@ -6,10 +6,22 @@ block content
     div
       h4= message.title
       p= message.body
-      if currentUser && (currentUser.membership_status === 'Member' || currentUser.membership_status === 'Admin')
-        div
-          p= message.author.full_name
-          p=message.date_formatted
+      if currentUser
+        if currentUser.membership_status === 'Member' || currentUser.membership_status === 'Admin'
+          div
+            p= message.author.full_name
+            p=message.date_formatted
+        if currentUser.membership_status === 'Admin'
+          form(
+            action=`/message/${message.id}/delete`
+            method="POST"
+          )
+            input(
+              type="hidden"
+              name="messageId"
+              value=message.id
+            )
+            button(type="submit") x
   else 
     if currentUser
       p No messages to show. #[a(href='/messages/create') Create] the first!

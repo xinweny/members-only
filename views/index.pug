@@ -1,5 +1,10 @@
 extends layout
 
-block content
-  main 
-    h2 Sign up to contribute to the message board!
+block content 
+  h2 Messages 
+  each message in messages 
+    div
+      h4= message.title
+      p= message.body
+  else 
+    p No messages to show. #[a(href='/login') Sign in] to add the first!

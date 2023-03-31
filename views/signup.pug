@@ -1,0 +1,47 @@
+extends layout 
+
+block content 
+  h2 Sign Up
+  form(action="" method="POST")
+    label(for="first-name") First Name
+      input(
+        type="text"
+        id="first-name"
+        name="first_name"
+        required
+      )
+
+    label(for="last-name") Last Name
+      input(
+        type="text"
+        id="last-name"
+        name="last_name"
+        required
+      )
+
+    label(for="email") Email
+      input(
+        type="email"
+        id="email"
+        name="email"
+        required
+      )
+    
+    label(for="pwd") Password
+      input(
+        type="password"
+        id="pwd"
+        name="pwd"
+        required
+      )
+
+    label(for="confirm-pwd") Confirm Password
+      input(
+        type="password"
+        id="confirm-pwd"
+        name="confirm_pwd"
+        required
+      )
+
+    button(type="submit") Sign Up
+    

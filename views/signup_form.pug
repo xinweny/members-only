@@ -8,6 +8,7 @@ block content
         type="text"
         id="first-name"
         name="first_name"
+        value=user ? user.first_name : ''
         required
       )
 
@@ -16,6 +17,7 @@ block content
         type="text"
         id="last-name"
         name="last_name"
+        value=user ? user.last_name : ''
         required
       )
 
@@ -24,6 +26,7 @@ block content
         type="email"
         id="email"
         name="email"
+        value=user ? user.email : ''
         required
       )
     
@@ -44,4 +47,8 @@ block content
       )
 
     button(type="submit") Sign Up
+
+  if errors
+    ul: for error in errors
+      li= error.msg
     

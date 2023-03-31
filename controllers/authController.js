@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
+const { body, validationResult } = require('express-validator');
 
 const User = require('../models/user');
 
@@ -7,31 +8,57 @@ exports.getSignupForm = (req, res) => { res.render('signup_form'); };
 
 exports.getLoginForm = (req, res) => { res.render('login_form'); };
 
-exports.signup = async (req, res, next) => {
-  try {
-    bcrypt.hash(
-      req.body.password,
-      10,
-      async (err, hashedPwd) => {
-        if (err) return next(err);
+exports.signup = [
+  body('first_name').trim().escape(),
+  body('last_name').trim().escape(),
+  body('email', 'Please enter a valid email address.')
+    .isEmail().normalizeEmail(),
+  body('pwd').exists(),
+  body('confirm_pwd', 'Passwords do not match - please try again.')
+    .exists()
+    .custom((value, { req }) => value === req.body.pwd),
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
 
-        const user = new User({
-          first_name: req.body.first_name,
-          last_name: req.body.last_name,
-          email: req.body.email,
-          password: hashedPwd,
-          membership_status: 'Non-member',
+      const saveFields = {
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+      };
+
+      if (!errors.isEmpty()) {
+        res.render('signup_form', {
+          user: saveFields,
+          errors: errors.array(),
         });
+        return;
+      };
 
-        await user.save();
-
-        res.redirect('/');
-      }
-    );
-  } catch (err) {
-    return next(err);
-  }
-};
+      bcrypt.hash(
+        req.body.pwd,
+        10,
+        async (err, hashedPwd) => {
+          if (err) return next(err);
+  
+          const user = new User({
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            email: req.body.email,
+            password: hashedPwd,
+            membership_status: 'Non-member',
+          });
+  
+          await user.save();
+  
+          res.redirect('/');
+        }
+      );
+    } catch (err) {
+      return next(err);
+    }
+  },
+];
 
 exports.login = passport.authenticate('local', {
   successRedirect: '/',

@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // route setup
 app.use('/', messagesRouter);
-app.use('/users', usersRouter);
+app.use('/', usersRouter);
 app.use('/login', loginRouter);
 app.use('/signup', signupRouter);
 

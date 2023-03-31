@@ -6,10 +6,9 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 
-const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const messagesRouter = require('./routes/messages');
-const signinRouter = require('./routes/signin');
+const loginRouter = require('./routes/login');
 const signupRouter = require('./routes/signup');
 
 // mongoDB connection setup
@@ -33,10 +32,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // route setup
-app.use('/', indexRouter);
+app.use('/', messagesRouter);
 app.use('/users', usersRouter);
-app.use('/messages', messagesRouter);
-app.use('/login', signinRouter);
+app.use('/login', loginRouter);
 app.use('/signup', signupRouter);
 
 // catch 404 and forward to error handler

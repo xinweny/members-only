@@ -4,31 +4,34 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const mongoose = require('mongoose');
 
 const usersRouter = require('./routes/users');
 const messagesRouter = require('./routes/messages');
 const authRouter = require('./routes/auth');
 
-// mongoDB connection setup
-mongoose.connect(process.env.MONGODB_URI, {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-});
-mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error'));
+const auth = require('./config/auth');
+const db = require('./config/db');
 
-// express app setup
+// mongoDB connection setup
+db.config();
+
+// app setup
 const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+// express setup
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// auth setup
+auth.configSession(app);
+auth.configPassport(app);
 
 // route setup
 app.use('/', messagesRouter);

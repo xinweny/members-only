@@ -43,7 +43,7 @@ exports.createMessage = [
 
 exports.deleteMessage = async (req, res, next) => {
   try {
-    await Message.findByIdAndDelete(req.body.messageId);
+    await Message.findByIdAndDelete(req.params.id);
 
     res.redirect('/');
   } catch (err) {

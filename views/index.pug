@@ -16,11 +16,6 @@ block content
             action=`/message/${message.id}/delete`
             method="POST"
           )
-            input(
-              type="hidden"
-              name="messageId"
-              value=message.id
-            )
             button(type="submit") x
   else 
     if currentUser

@@ -11,8 +11,14 @@ exports.getLoginForm = (req, res) => { res.render('login_form'); };
 exports.signup = [
   body('first_name').trim().escape(),
   body('last_name').trim().escape(),
-  body('email', 'Please enter a valid email address.')
-    .isEmail().normalizeEmail(),
+  body('email')
+    .isEmail().withMessage('Please enter a valid email address.')
+    .normalizeEmail()
+    .custom(async (value, {}) => {
+      const user = await User.findOne({ email: value });
+      
+      if (user) return Promise.reject('Email is already in use. Please enter a different email address.');
+    }),
   body('pwd').exists(),
   body('confirm_pwd', 'Passwords do not match - please try again.')
     .exists()

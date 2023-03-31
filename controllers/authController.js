@@ -73,6 +73,7 @@ exports.login = passport.authenticate('local', {
 
 exports.logout = (req, res, next) => {
   req.logout(err => {
+    console.log('logout');
     if (err) return next(err);
     res.redirect('/');
   })

@@ -6,9 +6,15 @@ html
   body
     header 
       h1: a(href="/") Members Only
+      if currentUser
+        p #{currentUser.full_name.toUpperCase()}
       nav
-        a(href="/signup") Sign up
-        a(href="/login") Login
+        if currentUser
+          a(href="/messages/create") Create Message
+          a(href="/logout") Logout
+        else
+          a(href="/signup") Sign up
+          a(href="/login") Login
 
     main
       block content

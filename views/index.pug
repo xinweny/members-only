@@ -7,4 +7,7 @@ block content
       h4= message.title
       p= message.body
   else 
-    p No messages to show. #[a(href='/login') Sign in] to add the first!
+    if currentUser
+      p No messages to show. #[a(href='/messages/create') Create] the first!
+    else
+      p No messages to show. #[a(href='/login') Sign in] to add the first!

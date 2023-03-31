@@ -15,16 +15,17 @@ exports.configSession = app => {
 
 exports.configPassport = app => {
   passport.use(new LocalStrategy(
-    async (username, password, done) => {
+    { usernameField: 'email' },
+    async (email, password, done) => {
       try {
-        const user = await User.findOne({ username });
+        const user = await User.findOne({ email });
 
-        if (!user) return done(null, false, { message: 'Incorect username' });
+        if (!user) return done(null, false, { message: 'Email not found. Please try again.' });
 
         bcrypt.compare(password, user.password, (err, res) => {
           if (res) return done(null, user);
 
-          return done(null, false, { message: 'Incorrect password' });
+          return done(null, false, { message: 'Incorrect password. Please try again.' });
         });
       } catch (err) {
         return done(err);
@@ -32,11 +33,13 @@ exports.configPassport = app => {
     }
   ));
 
-  passport.serializeUser((user, done) => { done(null, user.id); });
+  passport.serializeUser((user, done) => {
+    process.nextTick(() => { done(null, user._id); });
+  });
   passport.deserializeUser(async (id, done) => {
     try {
       const user = await User.findById(id);
-      return done(null, user);
+      process.nextTick(() => done(null, user));
     } catch (err) {
       return done(err);
     }
@@ -44,4 +47,11 @@ exports.configPassport = app => {
 
   app.use(passport.initialize());
   app.use(passport.session());
+};
+
+exports.storeCurrentUser = app => {
+  app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
+    next();
+  })
 };

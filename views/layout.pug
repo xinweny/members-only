@@ -7,11 +7,13 @@ html
     header 
       h1: a(href="/") Members Only
       if currentUser
-        p #{currentUser.full_name.toUpperCase()}
+        p #{currentUser.full_name.toUpperCase()}#{currentUser.membership_status === 'Member' ? ' ⭐️' : ''}
       nav
         if currentUser
           a(href="/messages/create") Create Message
           a(href="/logout") Logout
+          if currentUser.membership_status === 'Non-member'
+            a(href="/users/membership") Join The Club
         else
           a(href="/signup") Sign up
           a(href="/login") Login

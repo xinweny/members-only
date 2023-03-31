@@ -1,0 +1,21 @@
+extends layout 
+
+block content
+  if currentUser
+    h2 Become A Member
+    form(action="" method="POST")
+      label(for="member-pwd") Member Password
+        input(
+          type="password"
+          id="member-pwd"
+          name="member_password"
+          required
+        )
+
+      button(type="submit") Join The Club
+    
+    if errors 
+      ul: each error in errors 
+        li= error.msg
+  else 
+    p You do not have permission to view this page.

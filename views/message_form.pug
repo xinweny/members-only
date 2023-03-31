@@ -1,0 +1,29 @@
+extends layout
+
+block content 
+  main
+    if currentUser
+      h2 Create New Message
+      form(action="" method="POST")
+        label(for="title") Title
+          input(
+            type="text"
+            id="title"
+            name="title"
+            required
+          )
+
+        label(for="body") Body
+          textarea(
+            id="body"
+            name="body"
+            required
+          ) 
+        
+        button(type="submit") Create
+
+      if errors 
+        ul: each error in errors 
+          li= error.msg
+    else 
+      p You do not have permission to view this page.

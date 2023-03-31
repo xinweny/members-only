@@ -38,7 +38,7 @@ exports.configPassport = app => {
   });
   passport.deserializeUser(async (id, done) => {
     try {
-      const user = await User.findById(id);
+      const user = await User.findById(id, '-password');
       process.nextTick(() => done(null, user));
     } catch (err) {
       return done(err);

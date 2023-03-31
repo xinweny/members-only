@@ -8,8 +8,7 @@ const mongoose = require('mongoose');
 
 const usersRouter = require('./routes/users');
 const messagesRouter = require('./routes/messages');
-const loginRouter = require('./routes/login');
-const signupRouter = require('./routes/signup');
+const authRouter = require('./routes/auth');
 
 // mongoDB connection setup
 mongoose.connect(process.env.MONGODB_URI, {
@@ -33,9 +32,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // route setup
 app.use('/', messagesRouter);
-app.use('/', usersRouter);
-app.use('/login', loginRouter);
-app.use('/signup', signupRouter);
+app.use('/', authRouter);
+app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => { next(createError(404)); });

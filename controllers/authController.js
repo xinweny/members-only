@@ -1,13 +1,21 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const User = require('../models/user');
 
 exports.getSignupForm = (req, res, next) => {
-  res.render('signup');
+  try {
+    res.render('signup');
+  } catch (err) {
+    return next(err);
+  }
 };
 
 exports.getLoginForm = (req, res, next) => {
-  res.render('login');
+  try {
+    res.render('login');
+  } catch (err) {
+    return next(err);
+  }
 };
 
 exports.signup = (req, res, next) => {
